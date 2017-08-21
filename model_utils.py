@@ -74,6 +74,11 @@ def upsample_layer(bottom, shape, n_channels, name, upscale_factor, num_classes=
     return deconv
 
 
+def preprocess(images):
+    mean = tf.constant([123.68, 116.779, 103.939], dtype=tf.float32, shape=[1, 1, 1, 3], name='mean')
+    return images - mean
+
+
 def _reshape_fc_weights(name, new_shape):
     w = vgg_weights[name]
     w = w.reshape(new_shape)
