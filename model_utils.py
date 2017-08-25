@@ -4,22 +4,24 @@ import numpy as np
 vgg_weights = np.load('./pretrained_weights/vgg16_weights.npz')
 
 
-def conv_layer(parent, kernel, bias, name):
+def conv_layer(parent, kernel_name, bias_name, name):
     """
     This simple utility function create a convolution layer
     and applied relu activation.
 
     :param parent:
-    :param kernel: Kernel weight tensor
+    :param kernel_name: Kernel weight tensor
     :param bias: Bias tensor
     :param name: Name of this layer
     :return: Convolution layer created according to the given parameters.
     """
     with tf.variable_scope(name) as scope:
-        init = tf.constant_initializer(value=kernel, dtype=tf.float32)
-        kernel = tf.get_variable(name="weights", initializer=init, shape=kernel.shape)
+        kernel_weights = _get_kernel(kernel_name)
+        init = tf.constant_initializer(value=kernel_weights, dtype=tf.float32)
+        kernel = tf.get_variable(name="weights", initializer=init, shape=kernel_name.shape)
         conv = tf.nn.conv2d(parent, kernel, [1, 1, 1, 1], padding='SAME')
 
+        bias = _get_bias(bias_name)
         init = tf.constant_initializer(value=bias, dtype=tf.float32)
         biases = tf.get_variable(name="biases", initializer=init, shape=bias.shape)
 
@@ -71,12 +73,35 @@ def upsample_layer(bottom, shape, n_channels, name, upscale_factor, num_classes=
         weights = _get_bilinear_filter(filter_shape, upscale_factor)
         deconv = tf.nn.conv2d_transpose(bottom, weights, output_shape,
                                         strides=strides, padding='SAME')
-    return deconv
+
+        bias_init = tf.constant(0.0, shape=[num_classes])
+        bias = tf.get_variable('bias', initializer=bias_init)
+        dconv_with_bias = tf.nn.bias_add(deconv, bias)
+
+    return dconv_with_bias
 
 
 def preprocess(images):
     mean = tf.constant([123.68, 116.779, 103.939], dtype=tf.float32, shape=[1, 1, 1, 3], name='mean')
     return images - mean
+
+
+def skip_layer_connection(parent, name, num_input_layers, num_classes=2):
+    with tf.variable_scope(name) as scope:
+        initial = tf.truncated_normal([1, 1, num_input_layers, num_classes], stddev=0.05)
+        kernel = tf.get_variable('kernel', initializer=initial)
+        conv = tf.nn.conv2d(parent, kernel, [1, 1, 1, 1], padding='SAME')
+
+        bias_init = tf.constant(0.0, shape=[num_classes])
+        bias = tf.get_variable('bias', initializer=bias_init)
+        skip_layer = tf.nn.bias_add(conv, bias)
+
+        return skip_layer
+
+
+def _get_kernel(kernel_name):
+    kernel = vgg_weights[kernel_name]
+    return kernel
 
 
 def _reshape_fc_weights(name, new_shape):
