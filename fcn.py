@@ -89,7 +89,8 @@ class FCN:
                 itr += 1
 
     def inference(self, runs_dirs, data_dirs):
-        helper.save_inference_samples(runs_dirs, data_dirs, self.sess, self.input_shape, self.logits, self.dropout,
+        reshape_logits = tf.reshape(self.logits, (-1, self.n_classes))
+        helper.save_inference_samples(runs_dirs, data_dirs, self.sess, self.input_shape, reshape_logits, self.dropout,
                                       self.img_placeholder)
 
     def close_session(self):
