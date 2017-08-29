@@ -18,7 +18,7 @@ def conv_layer(parent, kernel_name, bias_name, name):
     with tf.variable_scope(name) as scope:
         kernel_weights = _get_kernel(kernel_name)
         init = tf.constant_initializer(value=kernel_weights, dtype=tf.float32)
-        kernel = tf.get_variable(name="weights", initializer=init, shape=kernel_name.shape)
+        kernel = tf.get_variable(name="weights", initializer=init, shape=kernel_weights.shape)
         conv = tf.nn.conv2d(parent, kernel, [1, 1, 1, 1], padding='SAME')
 
         bias = _get_bias(bias_name)
@@ -35,21 +35,23 @@ def max_pool_layer(parent, kernel, stride, name, padding='SAME'):
     return max_pool
 
 
-def fully_collected_layer(parent, name, num_classes=2):
+def fully_collected_layer(parent, name, dropout, num_classes=2):
     with tf.variable_scope(name) as scope:
         if name == 'fc_1':
             kernel = _reshape_fc_weights('fc6_W', [7, 7, 512, 4096])
             conv = tf.nn.conv2d(parent, kernel, [1, 1, 1, 1], padding='SAME')
             bias = _get_bias('fc6_b')
             output = tf.nn.bias_add(conv, bias)
-            return tf.nn.relu(output, name=scope.name)
+            output = tf.nn.relu(output, name=scope.name)
+            return tf.nn.dropout(output, dropout)
 
         if name == 'fc_2':
             kernel = _reshape_fc_weights('fc7_W', [1, 1, 4096, 4096])
             conv = tf.nn.conv2d(parent, kernel, [1, 1, 1, 1], padding='SAME')
             bias = _get_bias('fc7_b')
             output = tf.nn.bias_add(conv, bias)
-            return tf.nn.relu(output, name=scope.name)
+            output = tf.nn.relu(output, name=scope.name)
+            return tf.nn.dropout(output, dropout)
 
         if name == 'fc_3':
             initial = tf.truncated_normal([1, 1, 4096, num_classes], stddev=0.01)
@@ -57,8 +59,7 @@ def fully_collected_layer(parent, name, num_classes=2):
             conv = tf.nn.conv2d(parent, kernel, [1, 1, 1, 1], padding='SAME')
             initial = tf.constant(0.0, shape=[num_classes])
             bias = tf.get_variable('bias', initializer=initial)
-            output = tf.nn.bias_add(conv, bias)
-            return output
+            return tf.nn.bias_add(conv, bias)
 
         raise RuntimeError('{} is not supported as a fully connected name'.format(name))
 
@@ -115,10 +116,7 @@ def _reshape_fc_weights(name, new_shape):
 
 def _get_bias(name):
     bias_weights = vgg_weights[name]
-    shape = bias_weights.shape
-    init = tf.constant_initializer(value=bias_weights, dtype=tf.float32)
-    bias = tf.get_variable(name='bias', initializer=init, shape=shape)
-    return bias
+    return bias_weights
 
 
 def _get_bilinear_filter(filter_shape, upscale_factor):
