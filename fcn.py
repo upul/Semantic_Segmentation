@@ -61,10 +61,10 @@ class FCN:
         dconv3_shape = tf.stack([img_shape[0], img_shape[1], img_shape[2], self.n_classes])
         upsample_1 = upsample_layer(fc_3, dconv3_shape, self.n_classes, 'upsample_1', 32)
 
-        skip_1 = skip_layer_connection(pool4, 'skip_1', 512)
+        skip_1 = skip_layer_connection(pool4, 'skip_1', 512, stddev=0.00001)
         upsample_2 = upsample_layer(skip_1, dconv3_shape, self.n_classes, 'upsample_2', 16)
 
-        skip_2 = skip_layer_connection(pool3, 'skip_2', 256)
+        skip_2 = skip_layer_connection(pool3, 'skip_2', 256, stddev=0.00001)
         upsample_3 = upsample_layer(skip_2, dconv3_shape, self.n_classes, 'upsample_3', 8)
 
         logit = tf.add(upsample_3, tf.add(2 * upsample_2, 4 * upsample_1))
@@ -107,12 +107,12 @@ class FCN:
 
 if __name__ == '__main__':
     num_classes = 2
-    images_per_batch = 4
+    images_per_batch = 8
     data_dir = './data'
     runs_dir = './runs'
     input_size = (160, 576)
 
     get_batches_fn = helper.gen_batch_function(os.path.join(data_dir, 'data_road/training'), input_size)
     fc_network = FCN(input_size, images_per_batch, num_classes)
-    fc_network.optimize(get_batches_fn)
+    fc_network.optimize(get_batches_fn, num_epochs=5)
     fc_network.inference(runs_dir, data_dir)
