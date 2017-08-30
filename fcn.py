@@ -83,12 +83,12 @@ class FCN:
         saver = tf.train.Saver()
         # to visualize using TensorBoard
         writer = tf.summary.FileWriter('./graphs/kitti/', self.sess.graph)
-        ckpt = tf.train.get_checkpoint_state(os.path.dirname('./checkpoints/kitti/'))
+        ckpt = tf.train.get_checkpoint_state(os.path.dirname('./checkpoints/kitti/checkpoint'))
         if ckpt and ckpt.model_checkpoint_path:
             print('Graph is available in hard disk. Hence, loading it.')
             saver.restore(self.sess, ckpt.model_checkpoint_path)
 
-        initial_step = self.global_step.eval(session=self.sess)
+        initial_step = self.sess.run(self.global_step)
         num_batches = int(self.num_train_examples / self.batch_size)
         for itr in range(initial_step, num_batches * num_epochs):
             image, gt_image = next(batch_generator(self.batch_size))
@@ -107,9 +107,9 @@ class FCN:
                 tt = self.sess.run([validation_img_summary_op], feed_dict={self.images_viz: viz_images})
                 writer.add_summary(tt[0], itr)
 
-            if itr % self.num_train_examples == 0:
+            if ((itr + 1) % (num_batches * 20) == 0) or (itr == num_batches * num_epochs):
                 print('At iteration: {} save a checkpoint'.format(itr))
-                saver.save(self.sess, './checkpoints/kitti', itr)
+                saver.save(self.sess, './checkpoints/kitti/state', itr)
 
     def inference(self, runs_dirs, data_dirs):
         reshape_logits = tf.reshape(self.logits, (-1, self.n_classes))
@@ -159,5 +159,5 @@ if __name__ == '__main__':
 
     get_batches_fn = helper.gen_batch_function(os.path.join(data_dir, 'data_road/training'), input_size)
     fc_network = FCN(input_size, num_train_examples, viz_dir, images_per_batch, num_classes)
-    fc_network.optimize(get_batches_fn, num_epochs=1)
+    fc_network.optimize(get_batches_fn, num_epochs=250)
     fc_network.inference(runs_dir, data_dir)
