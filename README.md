@@ -25,6 +25,12 @@ We implement the `FCN-8s` model described in the (paper)[https://people.eecs.ber
 
 ### The KITTI dataset
 
+For training the semantic segmentation network, we used the [KITTI dataset](http://www.cvlibs.net/datasets/kitti/eval_road.php). The dataset consists of 289 training and 290 test images. It contains three different categories of road scenes:
+
+* uu - urban unmarked (98/100)
+* um - urban marked (95/96)
+* umm - urban multiple marked lanes (96/94)
+
 ### Training the Model
 
 ### Sample Output
