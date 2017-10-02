@@ -33,7 +33,7 @@ For training the semantic segmentation network, we used the [KITTI dataset](http
 
 ### Training the Model
 
-### Sample Output
+![loss_graph](./images/)
 
 ### Future Improvements
 
