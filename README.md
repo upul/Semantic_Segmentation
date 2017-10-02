@@ -19,7 +19,7 @@ Following shows sample output we managed to obtain during testing time.
 
 ### Network Architecture
 
-We implement the `FCN-8s` model described in the (paper)[https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf] by Jonathan Long et al. Following figure shows the architecture of the network. We generated this figure using TensorBoard.
+We implement the `FCN-8s` model described in the [paper](https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf) by Jonathan Long et al. Following figure shows the architecture of the network. We generated this figure using TensorBoard.
 
 ![architecture](./images/fcn_graph.png)
 
@@ -33,9 +33,18 @@ For training the semantic segmentation network, we used the [KITTI dataset](http
 
 ### Training the Model
 
+When it comes to training any deep learning algorithm, selecting suitable hyper-parameters play a big role. For this project, we carefully select following hyper-parameters
+
+|Parameter |Value  |Description|
+|:---------|:------|:----------|
+|Learning Rate|1e-5|We used `Adam` optimizer and normally 1e-3 or 1e-4 is the suggested learning rate. However, when we were experimenting with different learning rates we found out that 1e-5 works better than above values.|
+|Number of epochs|25|The training dataset is not too big and it has only 289 training examples. Hence, we use a moderate number of epochs.|
+|Batch Size|8|Based on the size of the training dataset, we selected batch size of 8 images.|
+
+The following image shows how the training loss changes when we train the model.
 ![loss_graph](./images/)
 
-### Future Improvements
-
 ### Conclusiotn
+
+
 
