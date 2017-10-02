@@ -54,7 +54,7 @@ def fully_collected_layer(parent, name, dropout, num_classes=2):
             return tf.nn.dropout(output, dropout)
 
         if name == 'fc_3':
-            initial = tf.truncated_normal([1, 1, 4096, num_classes], stddev=0.001)
+            initial = tf.truncated_normal([1, 1, 4096, num_classes], stddev=0.0001)
             kernel = tf.get_variable('kernel', initializer=initial)
             conv = tf.nn.conv2d(parent, kernel, [1, 1, 1, 1], padding='SAME')
             initial = tf.constant(0.0, shape=[num_classes])
@@ -87,7 +87,7 @@ def preprocess(images):
     return images - mean
 
 
-def skip_layer_connection(parent, name, num_input_layers, num_classes=2, stddev=0.005):
+def skip_layer_connection(parent, name, num_input_layers, num_classes=2, stddev=0.0005):
     with tf.variable_scope(name) as scope:
         initial = tf.truncated_normal([1, 1, num_input_layers, num_classes], stddev=stddev)
         kernel = tf.get_variable('kernel', initializer=initial)
