@@ -19,6 +19,10 @@ Following shows sample output we managed to obtain during testing time.
 
 ### Network Architecture
 
+We implement the `FCN-8s` model described in the (paper)[https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf] by Jonathan Long et al. Following figure shows the architecture of the network. We generated this figure using TensorBoard.
+
+![architecture](./images/fcn_graph.png)
+
 ### The KITTI dataset
 
 ### Training the Model
