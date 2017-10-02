@@ -46,9 +46,9 @@ The following image shows how the training loss changes when we train the model.
 
 ### Conclusiotn
 
-In this project, we investigated how to use a fully convolutional neural network for semantic segmentation. We tested our model against KITTI dataset. The results indicate that our model is quite capable of separating road pixels form the rest. However, we would like to work on following additional improvements to increase the accuracy of our model.
+In this project, we investigated how to use a fully convolutional neural network for semantic segmentation. We tested our model against KITTI dataset. The results indicate that our model is quite capable of separating road pixels form the rest. However, we would like to work on following additional ta to increase the accuracy of our model.
 1. Data Augmentation: During our testing, we have found that our mode failed to label road surface when inadequate lighting in the environment. We think data augmentation can be used to generate more training examples with different lighting conditions. So additional data generated using data augmentation will help us to overcome the above-mentioned issue.
-2.  
+  
 
 
 
