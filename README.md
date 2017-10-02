@@ -23,6 +23,15 @@ We implement the `FCN-8s` model described in the [paper](https://people.eecs.ber
 
 ![architecture](./images/fcn_graph.png)
 
+Additionally, we would like to describe main functionalities of the `python` scripts of this repository in the following table.
+
+|Script |Description|
+|:------|:----------|
+|`fcn.py`|This is the main script of the repository. The key methods of this script are:`build`, `optimize` and `inference`. The `build` method load pre-trained weights and build the network. The `optimize` method does the training and `inference` is used for testing with new images.|
+|`loss.py`|The script contains the loss function we optimize during the training.|
+|`helper.py`|This script contains some useful utility function for generating training and testing batches.|
+|`model_utils.py`|This script contains some useful utility functions to building fully convolutional network using VGG-16 pre-trained weights.|
+
 ### The KITTI dataset
 
 For training the semantic segmentation network, we used the [KITTI dataset](http://www.cvlibs.net/datasets/kitti/eval_road.php). The dataset consists of 289 training and 290 test images. It contains three different categories of road scenes:
