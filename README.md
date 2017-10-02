@@ -10,6 +10,13 @@ This repository contains a set of python scripts for you to train and test seman
 
 Please note that training checkpointing will be saved to `checkpoints\kitti` folder and logs will be saved to `graphs\kitti` folder. So by using `tensorboard --logdir=graphs\kitti` command, you can start tensorboard to inspect the training process.
 
+Following shows sample output we managed to obtain during testing time.
+
+![img_1](./sample_output/um_000014.png)
+![img_1](./sample_output/um_000032.png)
+![img_1](./sample_output/uu_000022.png)
+![img_1](./sample_output/uu_000099.png)
+
 ### Network Architecture
 
 ### The KITTI dataset
