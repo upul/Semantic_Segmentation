@@ -15,7 +15,7 @@ Following shows sample output we managed to obtain during testing time.
 ![img_1](./sample_output/um_000014.png)
 ![img_1](./sample_output/um_000032.png)
 ![img_1](./sample_output/uu_000022.png)
-![img_1](./sample_output/uu_000099.png)
+![img_1](./sample_output/uu_000081.png)
 
 ### Network Architecture
 
@@ -51,7 +51,7 @@ When it comes to training any deep learning algorithm, selecting suitable hyper-
 |Batch Size|8|Based on the size of the training dataset, we selected batch size of 8 images.|
 
 The following image shows how the training loss changes when we train the model.
-![loss_graph](./images/)
+![loss_graph](./images/loss_graph.png)
 
 ### Conclusiotn
 
