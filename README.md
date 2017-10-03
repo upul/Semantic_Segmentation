@@ -1,7 +1,7 @@
 # Semantic Segmentation using a Fully Convolutional Neural Network
 
 ### Introduction
-This repository contains a set of python scripts for you to train and test semantic segmentation using a fully convolutional neural network. Our semantic segmentation network is based on the [paper](https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf) described by Jonathan Long et al.
+This repository contains a set of python scripts to train and test semantic segmentation using a fully convolutional neural network. The semantic segmentation network is based on the [paper](https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf) described by Jonathan Long et al.
 
 #### How to Train the Model
 1. Since the network using VGG-16 weights, first, you have to download VGG-16 pre-trained weights from [https://www.cs.toronto.edu/~frossard/vgg16/vgg16_weights.npz](https://www.cs.toronto.edu/~frossard/vgg16/vgg16_weights.npz) and save in the the `pretrained_weights` folder.
